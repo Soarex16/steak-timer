@@ -11,22 +11,30 @@ import Timer from './Timer';
 export default function App() {
     const [currentDegree, setCurrentDegree] = useState(degreesOfRoast[0]);
 
+    const [isTimerTicking, setIsTimerTicking] = useState(false);
+
+    const handleTimerStart = () => setIsTimerTicking(true);
+    const handleTimerReset = () => setIsTimerTicking(false);
+
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor="transparent" translucent/>
 
             <Title />
 
-            <View style={styles.degreeOfRoastContainer}>
-                <DegreesOfRoast
-                    onCurrentDegreeChange={(d) => setCurrentDegree(d)}
-                />
+            <DegreesOfRoast
+                onCurrentDegreeChange={(d) => setCurrentDegree(d)}
+                disabled={isTimerTicking}
+            />
 
-                <DegreeOfRoastDetails degree={currentDegree}/>
-            </View>
+            <DegreeOfRoastDetails degree={currentDegree}/>
 
             <View style={styles.mainArea}>
-                <Timer timerDuration={currentDegree.time}/>
+                <Timer
+                    timerDuration={currentDegree.time}
+                    onStart={handleTimerStart}
+                    onReset={handleTimerReset}
+                />
             </View>
         </View>
     );
@@ -38,12 +46,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#20232a',
         flex: 1,
     },
-    degreeOfRoastContainer: {
-        flex: 1.5
-    },
     mainArea: {
         padding: 8,
-        flex: 3,
+        flex: 2,
         flexDirection: 'column',
         justifyContent: 'flex-end'
     }

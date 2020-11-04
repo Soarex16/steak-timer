@@ -5,7 +5,7 @@ import {View, StyleSheet} from 'react-native';
 import {degreesOfRoast} from '../degreesOfRoast';
 import DegreeOfRoast from './DegreeOfRoast';
 
-export default function DegreesOfRoast({ onCurrentDegreeChange }) {
+export default function DegreesOfRoast({ onCurrentDegreeChange, disabled }) {
     const handleDegreeSelect = (degree) => {
         onCurrentDegreeChange(degree);
     }
@@ -17,6 +17,7 @@ export default function DegreesOfRoast({ onCurrentDegreeChange }) {
                     <DegreeOfRoast
                         degree={d}
                         onDegreeSelect={() => handleDegreeSelect(d)}
+                        disabled={disabled}
                     />
                 </View>
             ))}

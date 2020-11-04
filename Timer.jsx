@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
-import {View, Text, Button, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import RoundedButton from './components/RoundedButton';
 
 // вспомогательная функция для форматирования оставшегося времени
@@ -14,7 +14,7 @@ function formatTime(t) {
     return `${minutesStr}:${secondsStr}`;
 }
 
-export default function Timer({ timerDuration }) {
+export default function Timer({ timerDuration, onStart, onReset }) {
     const [seconds, setSeconds] = useState(0);
 
     const [timerTicking, setTimerTicking] = useState(false);
@@ -46,6 +46,12 @@ export default function Timer({ timerDuration }) {
     const handleStart = () => {
         setSeconds(timerDuration);
         setTimerTicking(true);
+        onStart();
+    };
+
+    const handleResume = () => {
+        setTimerTicking(true);
+        onStart();
     };
 
     const handleFinish = () => {
@@ -64,6 +70,7 @@ export default function Timer({ timerDuration }) {
         setSeconds(timerDuration);
         setTimerTicking(false);
         setStopped(false);
+        onReset();
     };
 
     return (
@@ -85,7 +92,7 @@ export default function Timer({ timerDuration }) {
                         {!finished && (
                             <RoundedButton
                                 title="Resume"
-                                onPress={handleStart}
+                                onPress={handleResume}
                             />
                         )}
 
