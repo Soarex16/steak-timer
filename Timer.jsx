@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
-import {View, Text, Button, StyleSheet} from 'react-native';
+import {View, Text, Button, TouchableOpacity, StyleSheet} from 'react-native';
+import RoundedButton from './components/RoundedButton';
 
 // вспомогательная функция для форматирования оставшегося времени
 function formatTime(t) {
@@ -13,11 +14,8 @@ function formatTime(t) {
     return `${minutesStr}:${secondsStr}`;
 }
 
-// сколько секунд отсчитываем
-const t = 2;
-
-export default function Timer() {
-    const [seconds, setSeconds] = useState(t);
+export default function Timer({ timerDuration }) {
+    const [seconds, setSeconds] = useState(0);
 
     const [timerTicking, setTimerTicking] = useState(false);
     const [stopped, setStopped] = useState(false);
@@ -46,6 +44,7 @@ export default function Timer() {
 
     // запускаем таймер при нажатии на кнопку
     const handleStart = () => {
+        setSeconds(timerDuration);
         setTimerTicking(true);
     };
 
@@ -62,52 +61,64 @@ export default function Timer() {
     };
 
     const handleReset = () => {
-        setSeconds(t);
+        setSeconds(timerDuration);
         setTimerTicking(false);
         setStopped(false);
     };
 
     return (
-        <View style={styles.layout}>
-            <Text>{formatTime(seconds)}</Text>
+        <View style={styles.container}>
+            <View>
+                <Text style={styles.elapsedTime}>
+                    {formatTime(timerTicking || stopped ? seconds : timerDuration)}
+                </Text>
+            </View>
 
-            {!timerTicking && stopped && (
-                <Text>{finished ? 'Готово' : 'Пауза'}</Text>
-            )}
-
-            {timerTicking ? (
-                <Button
-                    title="Стоп"
-                    onPress={handleStop}
-                />
-            ) : stopped ? (
-                <>
-                    {!finished && (
-                        <Button
-                            title="Продолжить"
-                            onPress={handleStart}
-                        />
-                    )}
-
-                    <Button
-                        title="Сброс"
-                        onPress={handleReset}
+            <View style={styles.buttonsContainer}>
+                {timerTicking ? (
+                    <RoundedButton
+                        title="Stop"
+                        onPress={handleStop}
                     />
-                </>
-            ) : (
-                <Button
-                    title="Старт"
-                    onPress={handleStart}
-                />
-            )}
+                ) : stopped ? (
+                    <>
+                        {!finished && (
+                            <RoundedButton
+                                title="Resume"
+                                onPress={handleStart}
+                            />
+                        )}
+
+                        <RoundedButton
+                            title="Reset"
+                            onPress={handleReset}
+                        />
+                    </>
+                ) : (
+                    <RoundedButton
+                        title="Start"
+                        onPress={handleStart}
+                    />
+                )}
+            </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-   layout: {
-       flex: 1,
-       justifyContent: 'center',
-       alignItems: 'center'
-   }
+    container: {
+        paddingBottom: 30
+    },
+    elapsedTime: {
+        fontSize: 80,
+        fontWeight: 'bold',
+        color: '#f3e8d4',
+        textAlign: 'center',
+        padding: 30
+    },
+    buttonsContainer: {
+        flex: 0,
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+    }
 });
