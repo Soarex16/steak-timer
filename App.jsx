@@ -6,7 +6,7 @@ import {degreesOfRoast} from './degreesOfRoast';
 import Title from './components/Title';
 import DegreesOfRoast from './components/DegreesOfRoast';
 import DegreeOfRoastDetails from './components/DegreeOfRoastDetails';
-import Timer from './Timer';
+import Timer from './components/Timer';
 
 export default function App() {
     const [currentDegree, setCurrentDegree] = useState(degreesOfRoast[0]);
